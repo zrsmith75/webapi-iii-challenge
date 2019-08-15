@@ -6,6 +6,7 @@ const server = express();
 const bodyParser = express.json();
 
 server.use(bodyParser);
+server.use(logger);
 
 server.use("/api/posts", postRouter);
 server.use("/api/users", userRouter);
