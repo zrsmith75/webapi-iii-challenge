@@ -27,9 +27,45 @@ router.get("/:id", (req, res) => {
 
 router.get("/:id/posts", (req, res) => {});
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", (req, res) => {
+  dbUsers
+    .remove(req.params.id)
+    .then(count => {
+      // res.status(200).json(req.hub);
 
-router.put("/:id", (req, res) => {});
+      if (count > 0) {
+        res.status(200).json({ message: "The user has been destroyed" });
+      } else {
+        res.status(404).json({ message: "The user could not be found" });
+      }
+    })
+    .catch(error => {
+      // log error to server
+      console.log(error);
+      res.status(500).json({
+        message: "Error removing the user"
+      });
+    });
+});
+
+router.put("/:id", (req, res) => {
+  dbUsers
+    .update(req.params.id, req.body)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(404).json({ message: "The user could not be found" });
+      }
+    })
+    .catch(error => {
+      // log error to server
+      console.log(error);
+      res.status(500).json({
+        message: "Error updating the user"
+      });
+    });
+});
 
 //custom middleware
 
