@@ -31,7 +31,27 @@ router.put("/:id", (req, res) => {});
 
 //custom middleware
 
-function validateUserId(req, res, next) {}
+function validateUserId(req, res, next) {
+  const { id } = req.params;
+  dbUsers
+    .get(id)
+    .then(user => {
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        res.status(404).json({
+          message: "No user with specified id"
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error processing your request"
+      });
+    });
+}
 
 function validateUser(req, res, next) {}
 
